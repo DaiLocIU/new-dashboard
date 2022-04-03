@@ -1,0 +1,6 @@
+/* eslint-disable */
+
+const VUE_APP_API_BASE_URL = 'VUE_APP_API_BASE_URL';
+const VUE_APP_BASE_URL = 'VUE_APP_BASE_URL';
+const VUE_APP_DOMAIN = 'VUE_APP_DOMAIN';
+const VUE_APP_IP_SERVER = 'VUE_APP_IP_SERVER';
