@@ -72,13 +72,11 @@ export default defineComponent({
       return re.test(String(valueEmail).toLowerCase());
     }
     // disabled button submit
-    const isDisabledButtonSubmit = computed(() => {
-      return !((name.value && name.value.trim().length > 0)
+    const isDisabledButtonSubmit = computed(() => !((name.value && name.value.trim().length > 0)
         && (phone.value && phone.value.trim().length > 0 && isValidPhone(phone.value.trim()))
         && (email.value && email.value.trim().length > 0 && isValidEmail(email.value.trim()))
         && (password.value && password.value.trim().length > 0)
-        && isTermsConditionAccepted.value);
-    });
+        && isTermsConditionAccepted.value));
 
     return {
       name,
