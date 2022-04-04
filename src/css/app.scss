@@ -11,3 +11,20 @@
 .h-screen {
   height: 100vh !important;
 }
+
+.bg-white {
+  background-color: $white;
+}
+
+.layout--full-page {
+  .bg-img {
+    background-image: url("../assets/img/pages/login-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .full-page-bg-color {
+    background-color: #eff2f7;
+  }
+}
