@@ -45,13 +45,13 @@
     />
     <div class="w-full flex justify-between align-items">
       <q-btn label="Login" to="/pages/login" outline color="primary"></q-btn>
-      <q-btn label="Submit" type="Submit" color="primary"></q-btn>
+      <q-btn label="Submit" :disable="isDisabledButtonSubmit" type="Submit" color="primary"></q-btn>
     </div>
   </q-form>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 
 export default defineComponent({
   name: 'FormRegister',
@@ -71,6 +71,14 @@ export default defineComponent({
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(valueEmail).toLowerCase());
     }
+    // disabled button submit
+    const isDisabledButtonSubmit = computed(() => {
+      return !((name.value && name.value.trim().length > 0)
+        && (phone.value && phone.value.trim().length > 0 && isValidPhone(phone.value.trim()))
+        && (email.value && email.value.trim().length > 0 && isValidEmail(email.value.trim()))
+        && (password.value && password.value.trim().length > 0)
+        && isTermsConditionAccepted.value);
+    });
 
     return {
       name,
@@ -87,6 +95,7 @@ export default defineComponent({
       },
       rulesPhone: [(val) => (val && val.trim().length > 0 && isValidPhone(val.trim())) || 'Vui lòng nhập Số điện thoại đúng định dạng'],
       rulesEmail: [(val) => (val && val.trim().length > 0 && isValidEmail(val.trim())) || 'Vui lòng nhập Email đúng định dạng'],
+      isDisabledButtonSubmit,
     };
   },
 });
