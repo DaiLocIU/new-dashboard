@@ -54,6 +54,9 @@ module.exports = {
   rules: {
 
     'no-param-reassign': 'off',
+    'consistent-return': 'off',
+    'no-promise-executor-return': 'off',
+    'no-restricted-globals': 'off',
     'no-void': 'off',
     'no-nested-ternary': 'off',
     'max-classes-per-file': 'off',

@@ -5,23 +5,6 @@
   >
     <q-input
       filled
-      v-model="name"
-      label="Họ và tên"
-      lazy-rules
-      :rules="[ val => val && val.trim().length > 0 || 'Vui lòng nhập Họ và tên']"
-    ></q-input>
-
-    <q-input
-      filled
-      type="tel"
-      v-model="phone"
-      label="Số điện thoại"
-      class="q-mt-md"
-      lazy-rules
-      :rules="rulesPhone"
-    ></q-input>
-    <q-input
-      filled
       type="email"
       v-model="email"
       label="Email"
@@ -38,15 +21,10 @@
       lazy-rules
       :rules="[ val => val && val.trim().length > 0 || 'Vui lòng nhập mật khẩu']"
     ></q-input>
-    <q-checkbox
-      v-model="isTermsConditionAccepted"
-      label="Tôi đã đồng ý và đọc các điều khoản sử dụng của Woay"
-      class="q-my-md"
-    />
     <div class="w-full flex justify-between align-items">
-      <q-btn label="Đăng nhập" to="/pages/login" outline color="primary"></q-btn>
+      <q-btn label="Đăng ký" to="/pages/register" outline color="primary"></q-btn>
       <q-btn
-        label="Đăng ký"
+        label="Đăng nhập"
         :disable="isDisabledButtonSubmit"
         type="Submit"
         color="primary">
@@ -57,11 +35,12 @@
 
 <script>
 import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useQuasar } from 'quasar';
 
 export default defineComponent({
-  name: 'FormRegister',
+  name: 'FormLogin',
   setup() {
     const $q = useQuasar();
 
@@ -72,38 +51,31 @@ export default defineComponent({
     const isTermsConditionAccepted = ref(false);
 
     // validate form
-    function isValidPhone(p) {
-      const newP = p.startsWith('0') ? p.replace('0', '+84') : p;
-      return /^\+(?:[0-9]●?){10,11}[0-9]$/.test(newP);
-    }
     function isValidEmail(valueEmail) {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(valueEmail).toLowerCase());
     }
     // disabled button submit
-    const isDisabledButtonSubmit = computed(() => !((name.value && name.value.trim().length > 0)
-        && (phone.value && phone.value.trim().length > 0 && isValidPhone(phone.value.trim()))
-        && (email.value && email.value.trim().length > 0 && isValidEmail(email.value.trim()))
-        && (password.value && password.value.trim().length > 0)
-        && isTermsConditionAccepted.value));
+    const isDisabledButtonSubmit = computed(() => !(
+      (email.value && email.value.trim().length > 0 && isValidEmail(email.value.trim()))
+        && (password.value && password.value.trim().length > 0)));
 
     const store = useStore();
+    const router = useRouter();
 
     const onSubmit = async () => {
       try {
-        const phonePayload = phone.value.startsWith('0')
-          ? phone.value.replace('0', '+84')
-          : phone.value;
         const payload = {
-          name: name.value,
-          phone: phonePayload,
           email: email.value,
           password: password.value,
         };
-        await store.dispatch('auth/register', payload);
+        await store.dispatch('auth/login', payload);
         $q.notify({
-          message: 'Vui lòng kiểm tra email để tiếp tục',
+          message: 'Đăng nhập thành công',
           position: 'top',
+        });
+        await router.push({
+          name: 'IndexPage',
         });
       } catch (e) {
         $q.notify({
