@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-white">
+  <q-layout view="lHh Lpr lFf" class="main-layout bg-white">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -22,65 +22,134 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-grey-2"
+      class="my-sidebar bg-grey-2"
       :breakpoint="1200"
     >
-      <q-list>
-        <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable target="_blank" rel="noopener" href="https://quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>https://quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://github.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="code" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>GitHub</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="http://chat.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
-            <q-item-label caption>https://chat.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://forum.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="record_voice_over" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Forum</q-item-label>
-            <q-item-label caption>https://forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://twitter.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="rss_feed" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Twitter</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://facebook.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Facebook</q-item-label>
-            <q-item-label caption>@QuasarFramework</q-item-label>
-          </q-item-section>
-        </q-item>
+      <q-list class="fit">
+        <div class="shadow-bottom" v-if="showShadowBottom"></div>
+        <perfect-scrollbar
+          class="scroll-area"
+          @ps-scroll-y="psSectionScroll" @scroll="psSectionScroll"
+          ref="menuPs"
+        >
+          <my-sidebar
+            v-model="active"
+          >
+            <sidebar-item id="home">
+              <template #icon>
+                <q-icon name="icon-book-open"></q-icon>
+              </template>
+              Home
+            </sidebar-item>
+            <sidebar-item id="market">
+              <template #icon>
+                <q-icon name="icon-book-open"></q-icon>
+              </template>
+              Market Overview
+            </sidebar-item>
+            <sidebar-item id="Music">
+              <template #icon>
+                <q-icon name="icon-book-open"></q-icon>
+              </template>
+              Music
+            </sidebar-item>
+            <sidebar-group>
+              <template #header>
+                <sidebar-item arrow>
+                  <template #icon>
+                    <q-icon name="icon-book-open"></q-icon>
+                  </template>
+                  Social media
+                </sidebar-item>
+              </template>
+
+              <sidebar-item id="Instagram">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Instagram
+              </sidebar-item>
+              <sidebar-item id="twitter">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Twitter
+              </sidebar-item>
+              <sidebar-item id="Facebook">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Facebook
+              </sidebar-item>
+            </sidebar-group>
+            <sidebar-group>
+              <template #header>
+                <sidebar-item arrow>
+                  <template #icon>
+                    <q-icon name="icon-book-open"></q-icon>
+                  </template>
+                  Coding
+                </sidebar-item>
+              </template>
+
+              <sidebar-item id="github">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Github
+              </sidebar-item>
+              <sidebar-item id="codepen">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Codepen
+              </sidebar-item>
+              <sidebar-item id="discord">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Discord
+              </sidebar-item>
+              <sidebar-item id="Javascript">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Javascript
+              </sidebar-item>
+              <sidebar-item id="git">
+                <template #icon>
+                  <q-icon name="icon-circle-check-box"></q-icon>
+                </template>
+                Git
+              </sidebar-item>
+            </sidebar-group>
+            <sidebar-item id="donate">
+              <template #icon>
+                <q-icon name="icon-book-open"></q-icon>
+              </template>
+              Donate
+            </sidebar-item>
+            <sidebar-item id="drink">
+              <template #icon>
+                <q-icon name="icon-book-open"></q-icon>
+              </template>
+              Drink
+            </sidebar-item>
+            <sidebar-item id="shopping">
+              <template #icon>
+                <q-icon name="icon-book-open"></q-icon>
+              </template>
+              Shopping
+            </sidebar-item>
+            <sidebar-item id="chat">
+              <template #icon>
+                <q-icon name="icon-book-open"></q-icon>
+              </template>
+              Chat
+            </sidebar-item>
+          </my-sidebar>
+
+        </perfect-scrollbar>
       </q-list>
     </q-drawer>
 
@@ -96,9 +165,19 @@ import {
 } from 'vue';
 
 import { useStore } from 'vuex';
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
+import MySidebar from 'components/UIComponents/SideBar/MySidebar.vue';
+import SidebarItem from 'components/UIComponents/SideBar/SidebarItem.vue';
+import SidebarGroup from 'components/UIComponents/SideBar/SidebarGroup.vue';
 
 export default defineComponent({
   name: 'MainLayout',
+  components: {
+    MySidebar,
+    SidebarItem,
+    SidebarGroup,
+    PerfectScrollbar,
+  },
   setup() {
     const store = useStore();
     const leftDrawerOpen = ref(false);
@@ -106,10 +185,14 @@ export default defineComponent({
       leftDrawerOpen.value = !leftDrawerOpen.value;
     }
     const windowWidth = computed(() => store.state.layout.windowWidth);
+    const showShadowBottom = ref(false);
+    const active = ref('home');
     return {
       windowWidth,
       leftDrawerOpen,
       toggleLeftDrawer,
+      showShadowBottom,
+      active,
     };
   },
   data() {
@@ -117,27 +200,63 @@ export default defineComponent({
       BASE_URL: this.$util.getEnv(VUE_APP_BASE_URL),
     };
   },
+  methods: {
+    psSectionScroll() {
+      const scrollEl = this.$refs.menuPs.$el || this.$refs.menuPs;
+      this.showShadowBottom = scrollEl.scrollTop > 0;
+    },
+  },
 
 });
 </script>
+<style src="vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css"/>
 <style lang="scss">
 .main-layout {
   .q-header {
     position: relative;
     width: 100%;
   }
+  .q-drawer {
+    width: 260px !important;
+  }
   .q-page-container {
     padding-top: 0 !important;
   }
-  #content-area {
-    &.content-area-lg {
-      margin-left: 260px;
+  .my-sidebar {
+    .shadow-bottom{
+      position: absolute;
+      z-index: 2;
+      height: 60px;
+      width: 100%;
+      pointer-events: none;
+      margin-top: -1.3rem;
+      filter: blur(5px);
+      background: linear-gradient(
+          rgb(255, 255, 255) 41%, rgba(255, 255, 255, 0.11) 95%, rgba(255, 255, 255, 0) 100%
+      );
     }
-    &.content-area-full {
-      margin-left: 0;
+    .ps>.ps__rail-x {
+      display: none !important;
     }
-    height: 100%;
-    transition: margin-left 0.5s;
+
+    .scroll-area {
+      position: relative;
+      margin: auto;
+      width: 100%;
+      height: calc(var(--vh, 1vh) * 100 - 69px);
+
+      &:not(.ps) {
+        overflow-y: auto;
+      }
+
+      > .sidebar-group{
+        padding: 0 15px;
+      }
+
+      > .sidebar--item{
+        padding: 0 15px;
+      }
+    }
   }
 }
 </style>

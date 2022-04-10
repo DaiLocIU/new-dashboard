@@ -1,0 +1,38 @@
+
+.sidebar__group {
+  padding: 0px;
+  width: 100%;
+  min-width: 260px;
+  position: relative;
+  &.open {
+    .sidebar__group__content {
+      &:after {
+        transform: translate(0);
+        opacity: 1;
+      }
+    }
+    > .sidebar__group__header {
+      .sidebar__item {
+        opacity: 1;
+      }
+      .sidebar__item__arrow {
+        transform: rotate(180deg) !important;
+      }
+    }
+  }
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__content {
+    overflow: hidden;
+    transition: all .25s ease;
+    position: relative;
+  }
+  > .sidebar__group__header {
+    .sidebar__item:hover {
+      padding-left: 0px;
+    }
+  }
+}
