@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="root"
     class="sidebar__group"
     :class="{'open': this.openState}"
   >
@@ -26,7 +27,9 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import {
+  defineComponent, getCurrentInstance, ref, onMounted, watch, nextTick,
+} from 'vue';
 
 export default defineComponent({
   name: 'SidebarGroup',
@@ -35,59 +38,52 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  data() {
-    return {
-      group: true,
-      openState: false,
-    };
-  },
-  mounted() {
-    if (this.$el.querySelector('.active') || this.open) {
-      this.openState = true;
-    }
-  },
-  methods: {
-    handleClickItem(id) {
-      this.$parent.handleClickItem(id);
-    },
+  setup(props) {
+    const instance = getCurrentInstance();
+    const openState = ref(false);
+    const root = ref(null);
+    onMounted(() => {
+      if (root.value.querySelector('.active') || props.open) {
+        openState.value = true;
+      }
+    });
 
-    getValue() {
-      return this.$parent.getValue();
-    },
+    const content = ref(null);
 
-    beforeEnter(el) {
+    watch(open, async (newVal) => {
+      await nextTick();
+      const h = content.value.scrollHeight;
+      const { parent } = instance;
+      if (parent.group) {
+        if (newVal) {
+          parent.$refs.content.style.height = `${parent.$refs.content.scrollHeight + h - 1}px`;
+        } else {
+          parent.$refs.content.style.height = `${parent.$refs.content.scrollHeight - h + 1}px`;
+        }
+      }
+    });
+
+    const beforeEnter = (el) => {
       el.style.height = 0;
-    },
-
-    enter(el, done) {
+    };
+    const enter = (el, done) => {
       const h = el.scrollHeight;
       el.style.height = `${h - 1}px`;
-
       done();
-    },
+    };
 
-    leave(el) {
+    const leave = (el) => {
       el.style.minHeight = '0px';
       el.style.height = '0px';
-    },
-
-  },
-  watch: {
-    open: {
-      handler(newVal) {
-        this.$nextTick(() => {
-          const h = this.$refs.content.scrollHeight;
-          const parent = this.$parent;
-          if (parent.group) {
-            if (newVal) {
-              parent.$refs.content.style.height = `${parent.$refs.content.scrollHeight + h - 1}px`;
-            } else {
-              parent.$refs.content.style.height = `${parent.$refs.content.scrollHeight - h + 1}px`;
-            }
-          }
-        });
-      },
-    },
+    };
+    return {
+      openState,
+      beforeEnter,
+      enter,
+      leave,
+      root,
+      content,
+    };
   },
 });
 </script>

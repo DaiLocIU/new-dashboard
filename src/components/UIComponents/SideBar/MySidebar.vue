@@ -1,27 +1,47 @@
 <template>
-  <div class="sidebar-content">
+  <div v-if="hiddenBackground" class="sidebar-background"></div>
+  <div
+    class="sidebar-content"
+    :class="[{
+      'open': open
+    }]"
+  >
     <slot></slot>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, watch } from 'vue';
 
 export default defineComponent({
   name: 'MySidebar',
   props: {
-    modelValue: {
-      required: true,
+    open: {
+      type: Boolean,
+      default: false,
+    },
+    hiddenBackground: {
+      type: Boolean,
     },
   },
-  methods: {
-    getValue() {
-      return this.modelValue;
-    },
-    handleClickItem(id) {
-      console.log('updateActive', id);
-      this.$emit('update:modelValue', id);
-    },
+  setup(props, { emit }) {
+    const clickCloseSidebar = (evt) => {
+      if (!evt.target.closest('.sidebar-content')) {
+        emit('update:open', false);
+      }
+    };
+    watch(() => props.hiddenBackground, (newValue) => {
+      if (newValue) {
+        setTimeout(() => {
+          window.addEventListener('click', clickCloseSidebar);
+        }, 200);
+      } else {
+        window.removeEventListener('click', clickCloseSidebar);
+      }
+    });
+  },
+  mounted() {
+    window.MySidebar = this;
   },
 });
 </script>

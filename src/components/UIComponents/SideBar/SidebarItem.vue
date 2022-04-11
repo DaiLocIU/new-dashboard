@@ -25,7 +25,9 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'SidebarItem',
@@ -47,32 +49,26 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  mounted() {
-    window[`sidebarItem_${this.id}`] = this;
-  },
-  computed: {
-    active() {
-      if (this.$parent.getValue) return this.id === this.$parent.getValue();
-      if (this.$parent.$parent.getValue) return this.id === this.$parent.$parent.getValue();
-      return false;
-    },
-  },
-  methods: {
-    handleClick() {
-      if (this.id) {
-        if (this.$parent.handleClickItem) {
-          this.$parent.handleClickItem(this.id);
-        } else {
-          // first parent is transition
-          this.$parent.$parent.handleClickItem(this.id);
-        }
+  setup(props) {
+    const store = useStore();
+    const router = useRouter();
+    const currentSidebarActive = computed(() => store.state.sidebar.currentActive);
+    const active = computed(() => props.id === currentSidebarActive.value);
+    const setCurrentSidebarActive = (value) => store.dispatch('sidebar/updateCurrentActive', value);
+    const handleClick = () => {
+      if (props.id) {
+        setCurrentSidebarActive(props.id);
       }
-      if (this.to) {
-        this.$router.push(this.to);
-      } else if (this.href) {
-        window.open(this.href, this.target);
+      if (props.to) {
+        router.push(props.to);
+      } else if (props.href) {
+        window.open(props.href, props.target);
       }
-    },
+    };
+    return {
+      active,
+      handleClick,
+    };
   },
 });
 </script>

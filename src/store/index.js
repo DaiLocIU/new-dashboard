@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 
 import auth from './module-auth';
 import layout from './moudle-layout';
+import sidebar from './module-sidebar';
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;
@@ -16,6 +17,7 @@ export default store((/* { ssrContext } */) => createStore({
   modules: {
     auth,
     layout,
+    sidebar,
   },
 
   // enable strict mode (adds overhead!)
