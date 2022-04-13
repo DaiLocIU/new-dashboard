@@ -71,7 +71,7 @@ import {
 
 import { useStore } from 'vuex';
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
-import MySidebar from 'components/UIComponents/SideBar/MySidebar.vue';
+import MySidebar from 'components/UIComponents/SideBar/Sidebar.vue';
 import SidebarItem from 'components/UIComponents/SideBar/SidebarItem.vue';
 import SidebarGroup from 'components/UIComponents/SideBar/SidebarGroup.vue';
 
