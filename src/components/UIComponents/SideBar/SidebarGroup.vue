@@ -20,7 +20,18 @@
         ref="content"
         v-show="openState"
       >
-        <slot></slot>
+        <slot>
+          <sidebar-item
+            v-for="(link, indexChildren) in children"
+            :key="link.routeName + '_' + indexChildren"
+            :id="link.routeName"
+          >
+            <template #icon>
+              <q-icon :name="link.icon"></q-icon>
+            </template>
+            {{ link.name }}
+          </sidebar-item>
+        </slot>
       </div>
     </transition>
   </div>
@@ -30,6 +41,7 @@
 import {
   defineComponent, getCurrentInstance, ref, onMounted, watch, nextTick,
 } from 'vue';
+import SidebarItem from 'components/UIComponents/SideBar/SidebarItem.vue';
 
 export default defineComponent({
   name: 'SidebarGroup',
@@ -37,6 +49,12 @@ export default defineComponent({
     open: {
       type: Boolean,
     },
+    children: {
+      type: Array,
+    },
+  },
+  components: {
+    SidebarItem,
   },
   setup(props) {
     const instance = getCurrentInstance();

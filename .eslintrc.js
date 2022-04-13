@@ -75,6 +75,7 @@ module.exports = {
     'func-names': 'off',
     'no-undef': 'off',
     'no-console': 'off',
+    'vue/valid-v-slot': 'off',
 
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'

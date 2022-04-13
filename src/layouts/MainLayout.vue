@@ -10,118 +10,31 @@
           @ps-scroll-y="psSectionScroll" @scroll="psSectionScroll"
           ref="menuPs"
         >
-          <sidebar-item id="home">
-          <template #icon>
-            <q-icon name="icon-book-open"></q-icon>
-          </template>
-          Home
-          </sidebar-item>
-          <sidebar-item id="market">
-            <template #icon>
-              <q-icon name="icon-book-open"></q-icon>
-            </template>
-            Market Overview
-          </sidebar-item>
-          <sidebar-item id="Music">
-            <template #icon>
-              <q-icon name="icon-book-open"></q-icon>
-            </template>
-            Music
-          </sidebar-item>
-          <sidebar-group>
-            <template #header>
-              <sidebar-item arrow>
+          <div class="group-sidebar"
+            v-for="(group, indexGroup) in sidebar"
+            :key="indexGroup"
+          >
+            <component
+              v-for="(link, index) in group.items"
+              :is="sidebarType(link)"
+              :id="link.routeName"
+              :key="link.routeName + '_' + index"
+              :children="link.children || []"
+            >
                 <template #icon>
-                  <q-icon name="icon-book-open"></q-icon>
+                  <q-icon :name="link.icon"></q-icon>
                 </template>
-                Social media
-              </sidebar-item>
-            </template>
-
-            <sidebar-item id="Instagram">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Instagram
-            </sidebar-item>
-            <sidebar-item id="twitter">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Twitter
-            </sidebar-item>
-            <sidebar-item id="Facebook">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Facebook
-            </sidebar-item>
-          </sidebar-group>
-          <sidebar-group>
-            <template #header>
-              <sidebar-item arrow>
-                <template #icon>
-                  <q-icon name="icon-book-open"></q-icon>
+                <span v-if="sidebarType(link) === 'sidebar-item'">{{ link.name }}</span>
+                <template v-if="link.children" #header>
+                  <sidebar-item arrow>
+                    <template #icon>
+                      <q-icon :name="link.icon"></q-icon>
+                    </template>
+                    {{ link.name }}
+                  </sidebar-item>
                 </template>
-                Coding
-              </sidebar-item>
-            </template>
-
-            <sidebar-item id="github">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Github
-            </sidebar-item>
-            <sidebar-item id="codepen">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Codepen
-            </sidebar-item>
-            <sidebar-item id="discord">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Discord
-            </sidebar-item>
-            <sidebar-item id="Javascript">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Javascript
-            </sidebar-item>
-            <sidebar-item id="git">
-              <template #icon>
-                <q-icon size="16px" name="icon-circle-check-box"></q-icon>
-              </template>
-              Git
-            </sidebar-item>
-          </sidebar-group>
-          <sidebar-item id="donate">
-            <template #icon>
-              <q-icon name="icon-book-open"></q-icon>
-            </template>
-            Donate
-          </sidebar-item>
-          <sidebar-item id="drink">
-            <template #icon>
-              <q-icon name="icon-book-open"></q-icon>
-            </template>
-            Drink
-          </sidebar-item>
-          <sidebar-item id="shopping">
-            <template #icon>
-              <q-icon name="icon-book-open"></q-icon>
-            </template>
-            Shopping
-          </sidebar-item>
-          <sidebar-item id="chat">
-            <template #icon>
-              <q-icon name="icon-book-open"></q-icon>
-            </template>
-            Chat
-          </sidebar-item>
+            </component>
+          </div>
         </perfect-scrollbar>
       </my-sidebar>
     <div class="content-area" :class="contentAreaClass">
@@ -172,9 +85,14 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-
+    const initSidebar = () => store.dispatch('sidebar/initSidebar');
+    initSidebar();
     const setCurrentSidebarActive = (value) => store.dispatch('sidebar/updateCurrentActive', value);
-    setCurrentSidebarActive('home');
+    setCurrentSidebarActive('Home');
+
+    const sidebar = computed(() => store.state.sidebar.sidebar);
+    const sidebarType = (link) => (link.children && link.children.length ? 'sidebar-group' : 'sidebar-item');
+
     const windowWidth = computed(() => store.state.layout.windowWidth);
     const open = ref(false);
     watch(windowWidth, (newValue) => {
@@ -190,6 +108,8 @@ export default defineComponent({
       windowWidth,
       showShadowBottom,
       contentAreaClass,
+      sidebar,
+      sidebarType,
     };
   },
   data() {
