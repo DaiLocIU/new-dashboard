@@ -46,15 +46,6 @@ export function MatchMediaBreakpoint({ breakpoints, onBreakpointChange }) {
       .forEach((item) => item.removeListener(this._handleMediaQueryList));
   };
 
-  this.subscribe = (listener) => this._listeners.push(listener);
-
-  this.unsubscribe = (listener) => {
-    const index = this._listeners.indexOf(listener);
-    if (index === -1) return;
-
-    this._listeners.splice(index, 1);
-  };
-
   this.destroy = () => {
     this._listeners = [];
     this._removeListeners();
