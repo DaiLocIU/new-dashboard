@@ -3,7 +3,12 @@
     <flex-layout
       :gutter-inline="15"
       :gutter-block="15"
-      :default-col="4"
+      :break-at="[
+      { value: 1, width: 0 },
+      { value: 2, width: 768 },
+      { value: 3, width: 1180 },
+      { value: 4, width: 1440 },
+      ]"
     >
       <div class="flex-item-test"></div>
       <div class="flex-item-test"></div>
