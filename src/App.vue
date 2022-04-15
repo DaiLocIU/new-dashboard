@@ -3,35 +3,21 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, watch } from 'vue';
 import { useStore } from 'vuex';
+import useWindowSize from 'src/hooks/useWindowSize';
 
 export default defineComponent({
   name: 'App',
   setup() {
     const store = useStore();
+    const [width, height] = useWindowSize();
     const updateWindowWidth = (value) => store.dispatch('layout/updateWindowWidth', value);
-    const handleWindowResize = () => {
-      updateWindowWidth(window.innerWidth);
-      // Set --vh property
-      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-    };
-    return {
-      updateWindowWidth,
-      handleWindowResize,
-    };
+    watch([width, height], () => {
+      updateWindowWidth(width.value);
+      document.documentElement.style.setProperty('--vh', `${height.value * 0.01}px`);
+    }, { immediate: true });
   },
-  mounted() {
-    this.updateWindowWidth(window.innerWidth);
-    const vh = window.innerHeight * 0.01;
-    // Then we set the value in the --vh custom property to the root of the document
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  },
-  async created() {
-    window.addEventListener('resize', this.handleWindowResize);
-  },
-  unmounted() {
-    window.removeEventListener('resize', this.handleWindowResize);
-  },
+
 });
 </script>
