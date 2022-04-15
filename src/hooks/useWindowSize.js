@@ -4,7 +4,7 @@ export default () => {
   const width = ref(window.innerWidth);
   const height = ref(window.innerHeight);
   const handleResize = () => {
-    width.value = window.innerWidth;
+    window.value = window.innerWidth;
     height.value = window.innerHeight;
   };
   onMounted(() => {
